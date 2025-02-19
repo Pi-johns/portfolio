@@ -1,0 +1,44 @@
+@keyframes neonGlow {
+    0% {
+        text-shadow: 0 0 5px cyan, 0 0 10px cyan;
+    }
+
+    50% {
+        text-shadow: 0 0 20px cyan, 0 0 30px cyan;
+    }
+
+    100% {
+        text-shadow: 0 0 5px cyan, 0 0 10px cyan;
+    }
+}
+
+.neon-glow {
+    animation: neonGlow 2s infinite alternate;
+}
+
+.neon-button {
+    box-shadow: 0 0 10px purple, 0 0 20px purple;
+    transition: box-shadow 0.3s ease-in-out;
+}
+
+.neon-button:hover {
+    box-shadow: 0 0 15px magenta, 0 0 30px magenta;
+}
+
+@keyframes float {
+    0% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+.animate-float {
+    animation: float 3s infinite ease-in-out;
+}

@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="relative w-full min-h-screen bg-black overflow-hidden p-10">
+    <!-- Mystical Background -->
+    <div class="absolute inset-0 bg-[url('/static/images/magic-portal.gif')] bg-cover opacity-30"></div>
+
+    <div class="relative z-10 max-w-lg mx-auto bg-gray-900 bg-opacity-90 p-8 rounded-xl shadow-xl">
+        <h1 class="text-4xl font-bold text-purple-500 text-center neon-glow">
+            Join the Arcane Order ✨
+        </h1>
+        <p class="text-gray-400 text-center mt-2">Sign up and unlock the secrets of the digital realm.</p>
+
+        <!-- Display Errors -->
+        {% if error %}
+        <p class="text-red-400 text-center font-semibold mt-2">{{ error }}</p>
+        {% endif %}
+
+        <!-- Registration Form -->
+        <form method="post" class="mt-6">
+            {% csrf_token %}
+            <div class="mb-4">
+                <label class="text-gray-300">Wizard Name</label>
+                <input type="text" name="username" required value="{{ request.POST.username }}"
+                    class="w-full p-3 bg-gray-800 text-white rounded-lg focus:ring-2 focus:ring-purple-500">
+            </div>
+            <div class="mb-4">
+                <label class="text-gray-300">Scroll of Contact (Email)</label>
+                <input type="email" name="email" required value="{{ request.POST.email }}"
+                    class="w-full p-3 bg-gray-800 text-white rounded-lg focus:ring-2 focus:ring-purple-500">
+            </div>
+            <div class="mb-4">
+                <label class="text-gray-300">Secret Spell (Password)</label>
+                <input type="password" name="password" required
+                    class="w-full p-3 bg-gray-800 text-white rounded-lg focus:ring-2 focus:ring-purple-500">
+            </div>
+            <div class="mb-4">
+                <label class="text-gray-300">Confirm Secret Spell</label>
+                <input type="password" name="confirm_password" required
+                    class="w-full p-3 bg-gray-800 text-white rounded-lg focus:ring-2 focus:ring-purple-500">
+            </div>
+            <button type="submit"
+                class="w-full py-3 bg-purple-700 text-white text-lg font-semibold rounded-xl shadow-lg transform hover:scale-105 transition-all duration-300 neon-button">
+                Enchant & Enter 🔮
+            </button>
+        </form>
+
+        <p class="text-gray-400 text-center mt-4">Already a wizard? <a href="{% url 'login' %}"
+                class="text-cyan-300 hover:text-cyan-400">Enter here</a></p>
+    </div>
+</div>
+{% endblock %}

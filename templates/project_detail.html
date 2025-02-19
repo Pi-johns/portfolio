@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="relative w-full min-h-screen bg-black overflow-hidden p-10">
+    <!-- Magical Background -->
+    <div style="z-index: 200;"
+        class="absolute inset-0 bg-[url('/static/images/matrix-bg.gif')] bg-cover bg-center opacity-10"></div>
+
+    <!-- Back Links -->
+    <div class="relative z-10 max-w-6xl mx-auto flex justify-between mb-6">
+        <a href="{% url 'projects' %}" class="text-green-400 hover:text-green-300 transition">
+            🔙 Return to Archive
+        </a>
+        <a href="{% url 'home' %}" class="text-blue-400 hover:text-blue-300 transition">
+            🏠 Return to Home
+        </a>
+    </div>
+
+    <!-- Project Details -->
+    <div class="relative z-10 max-w-4xl mx-auto mt-6 bg-gray-900 bg-opacity-80 p-6 rounded-xl shadow-lg neon-border">
+        <h2 class="text-3xl font-bold text-green-300 mt-4"><strong>{{ project.title }}</strong></h2>
+        <p class="text-gray-400 mt-2 text-lg">
+            ✍️ By <span class="text-yellow-400">{{ project.owner.username }}</span> | 🕰 {{ project.created_at }}
+        </p>
+        <hr>
+        <br>
+        <img src="{{ project.image.url }}" class="w-full h-64 object-cover rounded-lg" alt="{{ project.title }}">
+        <p class="text-gray-400 mt-2 text-lg">{{ project.description }}</p>
+
+        <!-- Reaction Buttons -->
+        <div class="flex justify-center gap-6 mt-6">
+            <!-- Like Button -->
+            {% if user.is_authenticated %}
+            <form method="POST" action="{% url 'like_project' project.id %}">
+                {% csrf_token %}
+                <button type="submit"
+                    class="px-4 py-2 bg-blue-600 text-white rounded-lg shadow-md transform hover:scale-110 transition-all duration-300 neon-button">
+                    👍 {{ project.likes.count }} Likes
+                </button>
+            </form>
+            {% else %}
+            <p class="text-gray-400">Login to like 👍</p>
+            {% endif %}
+
+            <!-- Comment Button -->
+            <a href="#comments-section">
+                <button
+                    class="px-4 py-2 bg-yellow-600 text-white rounded-lg shadow-md transform hover:scale-110 transition-all duration-300 neon-button">
+                    💬 {{ project.comments.count }} Comments
+                </button>
+            </a>
+
+            <!-- Share Button -->
+            <button onclick="copyToClipboard('{{ request.build_absolute_uri }}')"
+                class="px-4 py-2 bg-red-600 text-white rounded-lg shadow-md transform hover:scale-110 transition-all duration-300 neon-button">
+                🔄 Share
+            </button>
+
+            <!-- Live Demo Button -->
+            {% if project.demo_url %}
+            <a href="{{ project.demo_url }}" target="_blank">
+                <button
+                    class="px-4 py-2 bg-green-600 text-white rounded-lg shadow-md transform hover:scale-110 transition-all duration-300 neon-button">
+                    🚀 View Live
+                </button>
+            </a>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Comment Section -->
+    <div id="comments-section" class="relative z-10 max-w-4xl mx-auto mt-10 bg-gray-800 p-6 rounded-xl neon-border">
+        <h2 class="text-2xl font-bold text-blue-300">📜 The Book of Thoughts</h2>
+        <div class="mt-4 space-y-4">
+            {% for comment in project.comments.all %}
+            <div class="bg-gray-700 p-4 rounded-lg">
+                <p class="text-gray-300"><strong>{{ comment.user.username }}</strong>:</p>
+                <p class="text-gray-400">{{ comment.content }}</p>
+                <p class="text-gray-500 text-sm">{{ comment.created_at }}</p>
+            </div>
+            {% empty %}
+            <p class="text-gray-400">No magical words yet... Be the first to enchant this project! 🔮</p>
+            {% endfor %}
+        </div>
+
+        <!-- Add Comment -->
+        {% if user.is_authenticated %}
+        <form method="POST" action="{% url 'add_project_comment' project.id %}" class="mt-6">
+            {% csrf_token %}
+            <textarea name="content" class="w-full p-3 bg-gray-700 text-white rounded-lg"
+                placeholder="Share your mystical thoughts..."></textarea>
+            <button type="submit" class="mt-3 px-4 py-2 bg-purple-600 text-white rounded-lg neon-button">
+                📝 Cast Your Words
+            </button>
+        </form>
+        {% else %}
+        <p class="text-gray-400 mt-4">Login to share your magical words. 🔑</p>
+        {% endif %}
+    </div>
+
+    <!-- Other Projects (Horizontal Scroll) -->
+    <div class="relative z-10 max-w-6xl mx-auto mt-10">
+        <h2 class="text-3xl font-bold text-yellow-300 mb-4">More Arcane Creations ✨</h2>
+        <div class="flex overflow-x-auto space-x-6 scrollbar-hide">
+            {% for other_project in other_projects %}
+            <a href="{% url 'project_detail' other_project.id %}"
+                class="block min-w-[250px] bg-gray-900 p-4 rounded-xl shadow-lg transform hover:scale-105 transition">
+                <img src="{{ other_project.image.url }}" class="w-full h-40 object-cover rounded-lg">
+                <h3 class="text-xl text-purple-300 mt-2">{{ other_project.title }}</h3>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<script>
+    function copyToClipboard(url) {
+        navigator.clipboard.writeText(url);
+        alert("🔗 The arcane link has been copied! Share the magic!");
+    }
+</script>
+
+{% endblock %}

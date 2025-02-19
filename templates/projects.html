@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="relative w-full min-h-screen bg-black overflow-hidden p-10">
+    <!-- Matrix & Magical Background -->
+    <div class="absolute inset-0 bg-[url('/static/images/matrix-bg.gif')] bg-cover bg-center opacity-20"></div>
+    <div class="absolute inset-0 bg-[url('/static/images/arcane-symbols.gif')] bg-cover bg-center opacity-10"></div>
+
+    <div class="relative z-10 max-w-6xl mx-auto text-center text-gray-200">
+        <h1 class="text-5xl md:text-7xl font-bold text-green-400 neon-glow">
+            The Wizard's Archive 📜
+        </h1>
+        <p class="text-lg mt-4 font-mono">
+            Behold, traveler! Here lies a collection of my enchanted creations—powerful spells woven into digital
+            masterpieces. Choose wisely, for each project holds a secret of the arcane.
+        </p>
+    </div>
+
+    <!-- Project Grid -->
+    <div class="relative z-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-10">
+        {% for project in projects %}
+        <div
+            class="bg-gray-900 bg-opacity-80 p-6 rounded-xl shadow-lg transform hover:scale-105 transition-all duration-300 neon-border">
+            <div class="w-full h-48 bg-gray-700 rounded-lg"><img src="{{ project.image.url }}" alt="{{ project.title }}"
+                    class="w-full h-full object-cover"></div>
+            <h2 class="text-2xl font-bold text-purple-300 mt-4">{{ project.title }}</h2>
+            <p class="text-gray-400 mt-2">{{ project.description|truncatewords:20 }}</p>
+
+            <!-- View Details Button -->
+            <a href="{% url 'project_detail' project.id %}">
+                <button
+                    class="mt-4 px-6 py-2 bg-cyan-600 text-white text-lg font-semibold rounded-lg shadow-md transform hover:scale-110 transition-all duration-300 neon-button">
+                    Unveil the Secrets 🔮
+                </button>
+            </a>
+
+            <!-- Like, Comment, Share Section -->
+            <div class="mt-4 flex items-center justify-between text-gray-400">
+                <!-- Like Button -->
+                <div class="flex items-center">
+                    {% if user.is_authenticated %}
+                    <form method="POST" action="{% url 'like_project' project.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="text-green-400 hover:text-green-500">
+                            👍 {{ project.likes.count }}
+                        </button>
+                    </form>
+                    {% else %}
+                    <p class="text-gray-400">Login to like 👍</p>
+                    {% endif %}
+                </div>
+
+                <!-- Comment Count -->
+                <div class="flex items-center">
+                    <span class="text-blue-400">💬 {{ project.comments.count }}</span>
+                </div>
+
+                <!-- Share Button -->
+                <div>
+                    <button onclick="copyToClipboard('{{ request.build_absolute_uri }}')"
+                        class="text-yellow-400 hover:text-yellow-500">
+                        🔗 Share
+                    </button>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Pagination -->
+    <div class="relative z-10 text-center mt-10">
+        {% if projects.has_next %}
+        <a href="?page={{ projects.next_page_number }}">
+            <button
+                class="px-6 py-3 bg-purple-700 text-white text-xl font-semibold rounded-xl shadow-lg transform hover:scale-110 transition-all duration-300 neon-button">
+                Summon More Projects ⚡
+            </button>
+        </a>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+    function copyToClipboard(url) {
+        navigator.clipboard.writeText(url);
+        alert("🔗 The arcane link has been copied! Share the magic!");
+    }
+</script>
+
+{% endblock %}

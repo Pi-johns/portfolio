@@ -1,0 +1,49 @@
+<div
+    class="bg-gray-900 bg-opacity-80 p-6 rounded-xl shadow-lg transform hover:scale-105 transition-all duration-300 neon-border">
+
+    {% if blog.image %}
+    <img src="{{ blog.image.url }}" alt="{{ blog.title }}" class="w-full h-48 object-cover rounded-lg">
+    {% endif %}
+
+    <h2 class="text-2xl font-bold text-green-300 mt-4">{{ blog.title }}</h2>
+    <p class="text-gray-400 mt-2">{{ blog.content|truncatewords:20 }}</p>
+
+    <div class="flex justify-between items-center mt-4">
+        <button data-blog-id="{{ blog.id }}" class="like-btn px-3 py-1 bg-red-600 text-white rounded-lg">
+            ❤️ <span class="like-count">{{ blog.total_likes }}</span>
+        </button>
+        <a href="{% url 'blog_detail' slug=blog.slug %}" class="px-3 py-1 bg-blue-600 text-white rounded-lg">
+            Read More 📖
+        </a>
+    </div>
+</div>
+
+<!-- 🛠 Add JavaScript for AJAX Like Button -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll(".like-btn").forEach(button => {
+            button.addEventListener("click", function () {
+                let blogId = this.dataset.blogId;
+                let likeCount = this.querySelector(".like-count");
+
+                fetch(`/like-blog/${blogId}/`, {
+                    method: "POST",
+                    headers: {
+                        "X-CSRFToken": "{{ csrf_token }}",
+                        "X-Requested-With": "XMLHttpRequest"
+                    }
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.liked) {
+                            this.classList.add("bg-red-700"); // Change color if liked
+                        } else {
+                            this.classList.remove("bg-red-700");
+                        }
+                        likeCount.textContent = data.total_likes;
+                    })
+                    .catch(error => console.error("Error:", error));
+            });
+        });
+    });
+</script>

@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="relative w-full min-h-screen bg-black overflow-y-auto flex items-center justify-center">
+    <!-- Matrix-Style Background -->
+    <div class="absolute inset-0 bg-[url('/static/images/matrix-bg.gif')] bg-cover opacity-20"></div>
+
+    <!-- Floating Magical Symbols -->
+    <div class="absolute inset-0 flex justify-center items-center">
+        <span class="text-7xl text-purple-400 animate-pulse absolute top-16 left-10">🪄</span>
+        <span class="text-6xl text-blue-400 animate-spin absolute top-10 right-20">✨</span>
+        <span class="text-6xl text-green-400 animate-bounce absolute bottom-20 left-20">🔮</span>
+    </div>
+
+    <!-- Content Wrapper with Center Alignment on Large Screens -->
+    <div class="relative z-10 w-full max-w-5xl mx-auto px-6 md:px-12 py-12">
+        <div class="flex flex-col md:flex-row items-center justify-between space-y-10 md:space-y-0">
+            <!-- Glowing Welcome Text -->
+            <div class="md:w-1/2 text-left space-y-6">
+                <h1
+                    class="text-5xl md:text-7xl font-bold text-cyan-400 neon-glow leading-tight text-center md:text-left">
+                    Welcome, Mortal! <br> I am <span class="text-purple-500">B3B the Wizard</span> 🧙‍♂️
+                </h1>
+                <p class="text-lg text-gray-300 max-w-2xl text-center md:text-left">
+                    A sorcerer of the digital realm, weaving spells of <strong>Python</strong>,
+                    <strong>JavaScript</strong>, and <strong>Django</strong>.
+                    I summon powerful web applications from the depths of the void.
+                </p>
+                <p class="text-lg text-gray-300 text-center md:text-left">
+                    Step into my enchanted <strong>Codex of Creations</strong> and witness the arcane wonders of my
+                    projects.
+                </p>
+                <div class="flex flex-wrap gap-4 justify-center md:justify-start">
+                    <a href="{% url 'projects' %}" class="px-6 py-3 bg-purple-600 text-white text-xl font-semibold rounded-xl 
+                        shadow-lg transform hover:scale-110 transition-all duration-300 neon-button">
+                        Enter the Spellbook 🔥
+                    </a>
+                    <a href="{% url 'about' %}" class="px-6 py-3 bg-cyan-600 text-white text-xl font-semibold rounded-xl 
+                        shadow-lg transform hover:scale-110 transition-all duration-300 neon-button">
+                        About B3B ✨
+                    </a>
+                </div>
+            </div>
+
+            <!-- Sci-Fi Wizard Image -->
+            <div class="md:w-1/2 flex justify-center">
+                <img src="/static/images/sorcerer.webp" alt="Wizard Casting Spell"
+                    class="max-w-xs md:max-w-md animate-fade-in drop-shadow-lg">
+            </div>
+        </div>
+
+        <!-- Social Links Section -->
+        <div class="flex flex-col items-center justify-center mt-16 space-y-4">
+            <h2 class="text-3xl font-bold text-cyan-400 neon-glow">Find Me in the Ether ⚡</h2>
+            <div class="flex flex-wrap gap-6 justify-center">
+                <a href="https://github.com/Pi-johns" class="text-gray-300 hover:text-white text-xl">
+                    🐙 GitHub
+                </a>
+                <a href="https://twitter.com/yourprofile" class="text-gray-300 hover:text-white text-xl">
+                    🐦 Twitter
+                </a>
+                <a href="https://linkedin.com/in/johny-santu-808140220/" class="text-gray-300 hover:text-white text-xl">
+                    💼 LinkedIn
+                </a>
+                <a href="mailto:johnmuturi024@gmail.com" class="text-gray-300 hover:text-white text-xl">
+                    📧 Email
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

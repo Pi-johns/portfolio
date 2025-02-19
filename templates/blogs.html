@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="relative w-full min-h-screen bg-black overflow-hidden p-10">
+    <!-- Matrix & Magical Background -->
+    <div class="absolute inset-0 bg-[url('/static/images/matrix-bg.gif')] bg-cover bg-center opacity-20"></div>
+    <div class="absolute inset-0 bg-[url('/static/images/arcane-symbols.gif')] bg-cover bg-center opacity-10"></div>
+
+    <div class="relative z-10 max-w-6xl mx-auto text-center text-gray-200">
+        <h1 class="text-5xl md:text-7xl font-bold text-green-400 neon-glow">
+            "The Enchanted Scrolls of Insight 🔮📖"
+        </h1>
+        <p class="text-lg mt-4 font-mono">
+            "Within these ancient scrolls lie secrets of the digital realm, recorded by the scribes of code and infused
+            with arcane wisdom. Seek, read, and let the knowledge awaken your inner sorcerer!" 🧙‍♂️✨
+            "Only the worthy may decipher their magic... Are you ready? 📖🔥" </p>
+    </div>
+
+    <!-- Search & Filter Section -->
+    <div class="relative z-10 max-w-4xl mx-auto mt-6 flex flex-col md:flex-row justify-between gap-4">
+        <input type="text" id="search-bar" placeholder="🔍 Seek the arcane knowledge..."
+            class="w-full md:w-1/3 px-4 py-2 bg-gray-800 text-white rounded-lg">
+        <select id="tech-filter" class="w-full md:w-1/3 px-4 py-2 bg-gray-800 text-white rounded-lg">
+            <option value="">Filter by Tech Stack 🛠️</option>
+            <option value="Django">Django</option>
+            <option value="React">React</option>
+            <option value="Python">Python</option>
+        </select>
+        <input type="date" id="date-filter" class="w-full md:w-1/3 px-4 py-2 bg-gray-800 text-white rounded-lg">
+    </div>
+
+    <!-- Blog Grid -->
+    <div id="blog-container" class="relative z-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-10">
+        {% for blog in blogs %}
+        <div
+            class="bg-gray-900 bg-opacity-80 p-6 rounded-xl shadow-lg transform hover:scale-105 transition-all duration-300 neon-border">
+            {% if blog.image %}
+            <img src="{{ blog.image.url }}" alt="{{ blog.title }}" class="w-full h-48 object-cover rounded-lg">
+            {% endif %}
+
+            <h2 class="text-2xl font-bold text-purple-300 mt-4">{{ blog.title }}</h2>
+            <p class="text-gray-400 mt-2">{{ blog.content|truncatewords:20 }}</p>
+
+            <!-- Read More Button -->
+            <a href="{% url 'blog_detail' blog.slug %}">
+                <button
+                    class="mt-4 px-6 py-2 bg-cyan-600 text-white text-lg font-semibold rounded-lg shadow-md transform hover:scale-110 transition-all duration-300 neon-button">
+                    Read the Scroll 📜
+                </button>
+            </a>
+
+            <!-- Like, Comment, Share Section -->
+            <div class="mt-4 flex items-center justify-between text-gray-400">
+                <!-- Like Button -->
+                <div class="flex items-center">
+                    {% if user.is_authenticated %}
+                    <form method="POST" action="{% url 'like_blog' blog.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="text-green-400 hover:text-green-500">
+                            👍 {{ blog.likes.count }}
+                        </button>
+                    </form>
+                    {% else %}
+                    <p class="text-gray-400">Login to like 👍</p>
+                    {% endif %}
+                </div>
+
+                <!-- Comment Count -->
+                <div class="flex items-center">
+                    <span class="text-blue-400">💬 {{ blog.comments.count }}</span>
+                </div>
+
+                <!-- Share Button -->
+                <div>
+                    <button onclick="copyToClipboard('{{ request.build_absolute_uri }}')"
+                        class="text-yellow-400 hover:text-yellow-500">
+                        🔗 Share
+                    </button>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <p class="text-center text-gray-400 text-xl mt-10">⚠️ No matching scrolls found! Try another spell. 🧙‍♂️</p>
+        {% endfor %}
+    </div>
+
+    <!-- Pagination -->
+    <div class="relative z-10 text-center mt-10">
+        {% if blogs.has_next %}
+        <a href="?page={{ blogs.next_page_number }}">
+            <button
+                class="px-6 py-3 bg-purple-700 text-white text-xl font-semibold rounded-xl shadow-lg transform hover:scale-110 transition-all duration-300 neon-button">
+                Summon More Scrolls ⚡
+            </button>
+        </a>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+    function copyToClipboard(url) {
+        navigator.clipboard.writeText(url);
+        alert("🔗 The arcane link has been copied! Share the magic!");
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        function applyFilters() {
+            let searchQuery = document.getElementById("search-bar").value;
+            let techFilter = document.getElementById("tech-filter").value;
+            let dateFilter = document.getElementById("date-filter").value;
+            let queryString = `?search=${searchQuery}&tech=${techFilter}&date=${dateFilter}`;
+
+            fetch(queryString, {
+                headers: { "X-Requested-With": "XMLHttpRequest" }
+            })
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById("blog-container").innerHTML = data.trim() || `<p class="text-center text-gray-400 text-xl mt-10">⚠️ No matching scrolls found! Try another spell. 🧙‍♂️</p>`;
+                });
+        }
+
+        document.getElementById("search-bar").addEventListener("input", applyFilters);
+        document.getElementById("tech-filter").addEventListener("change", applyFilters);
+        document.getElementById("date-filter").addEventListener("change", applyFilters);
+    });
+</script>
+
+{% endblock %}
