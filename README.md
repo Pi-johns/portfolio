@@ -1,4 +1,4 @@
-![Screenshot from 2025-02-20 02-23-22](https://github.com/user-attachments/assets/6d82d82a-e163-4eb8-9f4f-4862c33bac53)# Wizard Portfolio -
+# Wizard Portfolio -
 
 ## 🧙‍♂️ Project Overview
 Wizard Portfolio is a **sci-fi, wizard-themed** developer portfolio built with **Django, HTML, CSS, and JavaScript**. It features a **dark theme with neon colors**, magical animations, and a futuristic Matrix-like aesthetic. Users can explore **projects, blogs, and interact** through likes, comments, and shares.
