@@ -142,13 +142,5 @@ Ensure **DEBUG=False** in production and set up proper media file handling.
 ## 🪄 Author
 Developed by **Pi-johns the Code Wizard** 🧙‍♂️✨
 
-📌 **GitHub**: [YourGitHub](https://github.com/your-username)  
-📌 **Portfolio**: [YourWebsite](https://yourwebsite.com)  
-📌 **LinkedIn**: [YourLinkedIn](https://linkedin.com/in/yourname)  
-📌 **Twitter**: [@YourTwitter](https://twitter.com/yourhandle)  
-
----
-
 🪄 **Unleash the magic and build your own wizardly portfolio!** 🔥🚀
-
 
